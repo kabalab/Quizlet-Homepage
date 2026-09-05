@@ -53,8 +53,14 @@
         height:5em;
     }
 
-    .startSideButton{
+    .clearButton{
         width:5.5em;
+        height:5em;
+        font-size: 1em;    
+    }
+
+    .startSideButton{
+        width:3em;
         height:2.5em;
         font-size: 2em;    
     }
@@ -121,7 +127,7 @@
 
             const startSideButton = document.createElement("button");
             startSideButton.className = "startSideButton buttons";
-            startSideButton.textContent = "You flipper";
+            startSideButton.textContent = "flip";
             startSideButton.id = "side";
             startSideButton.dataset.uniton = "true";
             startSideButton.onclick = function() {decideColorOfButton("side");};
