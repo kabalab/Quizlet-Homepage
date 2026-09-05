@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Homepage</title>
+
+  <style>
+    .divButtons{
+        background:blue;
+        display:grid;
+        grid-template-columns: repeat(auto-fit, 5em);
+        justify-content:center;
+        gap:1em;
+        padding-top: 1em;
+        padding-bottom: 1em;
+        padding-left: .5em;
+        padding-right: .5em;
+        width:100%;
+        max-width:calc(5 * 5em + 4 * 1em);
+        place-items: center; 
+        box-shadow: 1em 6px 20px 8px rgba(0, 0, 0, .6);
+        border-radius:1em;
+        margin:auto;
+    }
+
+    .bottomDiv{
+        display: flex; 
+        justify-content: center;
+        gap: 1em;
+        width: 100em;
+        height: 5em;
+    }
+
+    .buttons{
+        background-color: white;
+        border-radius: 1em;
+        border-width: 0px;
+        cursor: pointer;
+    }
+    
+    
+    .colorButton{
+        width: 1.2em;
+        height: 1.2em;
+        font-size:4em;
+        display: flex;
+        justify-content: center;
+        align-items:center;
+    }
+
+    
+    .unitButton{
+        width:5em;
+        height:5em;
+    }
+
+    .startSideButton{
+        width:5.5em;
+        height:2.5em;
+        font-size: 2em;    
+    }
+    
+    .openButton{
+        width:5.5em;
+        height:2.5em;
+        font-size: 2em;
+    }
+    
+    .copyButton{
+        width:1.2em;
+        height:1.2em;
+        font-size: 3.3em;
+        display: flex;
+        justify-content: center;
+        align-items:center;
+    }
+
+  </style>
+
+</head>
+<body>
+    <div class="divButtons"></div>
+
+    <script>
+        const mainDiv = document.querySelector(".divButtons");
+        let unitsSelected = [];
+
+        setUpUnits();
+        
+        
+        function setUpUnits(){
+            
+            for (let i = 1;i <= 30;i++){
+                const currentButton = document.createElement("button");
+                currentButton.className = "unitButton buttons";
+                currentButton.id = `unit${i}`;
+                currentButton.textContent = `Unit ${i}`;
+                currentButton.dataset.uniton = "true";
+                currentButton.onclick = function() {decideColorOfButton(`unit${i}`);};
+                mainDiv.appendChild(currentButton);
+            }
+
+            const bufferDiv1 = document.createElement("div");
+            mainDiv.appendChild(bufferDiv1);
+            const bufferDiv2 = document.createElement("div");
+            mainDiv.appendChild(bufferDiv2);
+            
+            const bottomButtons = document.createElement("div")
+            bottomButtons.className = "bottomDiv";
+            mainDiv.appendChild(bottomButtons);
+            
+            const bufferDiv3 = document.createElement("div");
+            mainDiv.appendChild(bufferDiv3);
+            const bufferDiv4 = document.createElement("div");
+            mainDiv.appendChild(bufferDiv4);
+            
+            const clearButton = document.createElement("button");
+            clearButton.className = "clearButton buttons";
+            clearButton.textContent = "Clear selected Units";
+            clearButton.onclick = function() {clearUnits();};
+            bottomButtons.appendChild(clearButton);
+
+            const startSideButton = document.createElement("button");
+            startSideButton.className = "startSideButton buttons";
+            startSideButton.textContent = "You flipper";
+            startSideButton.id = "side";
+            startSideButton.dataset.uniton = "true";
+            startSideButton.onclick = function() {decideColorOfButton("side");};
+            bottomButtons.appendChild(startSideButton);
+            
+            const openButton = document.createElement("button");
+            openButton.className = "openButton buttons";
+            openButton.textContent = "Open selection";
+            openButton.onclick = function() {openSelected();};
+            bottomButtons.appendChild(openButton);
+            
+            const copyButton = document.createElement("button");
+            copyButton.className = "copyButton buttons";
+            copyButton.textContent = "🗐";
+            copyButton.onclick = function() {copySelected();};
+            bottomButtons.appendChild(copyButton)
+        }
+
+        function decideColorOfButton(buttonId){
+            const myButt = document.getElementById(buttonId);
+            if (myButt.dataset.uniton === "true"){
+                myButt.style.backgroundColor = "gray";
+                myButt.dataset.uniton = "false";
+                if (buttonId != "side"){
+                    unitsSelected.push(myButt);
+                }
+            }
+            else {
+                myButt.style.backgroundColor = "white";
+                myButt.dataset.uniton = "true";
+                if (buttonId != "side"){
+                    unitsSelected.splice(unitsSelected.indexOf(myButt),1);
+                }
+            }
+        }
+
+        function openSelected(){
+            if (unitsSelected.length != 0){
+                console.log(`Open website with the link of ${setUpLink()}`)
+            } else {
+                alert("Not enough units to open");
+            }
+        }
+
+        function copySelected(){
+            if (unitsSelected.length != 0){
+                navigator.clipboard.writeText(setUpLink());
+                alert(`Coppied "${setUpLink()}" to your clipboard`);
+            } else {
+                alert("Not enough units to copy");
+            }
+        }
+
+        function setUpLink(){
+            let link = "linkladidadida.com/?";
+            if (document.getElementById("side").dataset.uniton === "false"){
+                link += "side=1&units=";
+            } else {
+                link += "side=0&units="
+            }
+            unitsSelected.forEach(button => {
+                link += button.id.slice(4) + ",";
+            });
+            return link;
+        }
+
+        function clearUnits(){
+            unitsSelected.slice().forEach(button => {
+                decideColorOfButton(button.id);
+            });
+        }
+    </script>
+</body>
